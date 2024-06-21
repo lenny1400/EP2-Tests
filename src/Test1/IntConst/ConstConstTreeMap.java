@@ -20,13 +20,14 @@ import java.util.List;
 public class ConstConstTreeMap {
 
     //TODO: additional variables, constructors and methods must be private.
+    TreeNode root;
 
     /**
      * Initializes 'this' as an empty map.
      */
     public ConstConstTreeMap() {
-
         //TODO: implement constructor.
+        this.root = null;
     }
 
     /**
@@ -35,8 +36,21 @@ public class ConstConstTreeMap {
      * @param map the map from which key-value mappings are copied to this new map, map != null.
      */
     public ConstConstTreeMap(ConstConstTreeMap map) {
-
         //TODO: implement constructor.
+        if (map.root != null) {
+            this.root = copy(map.root);
+        }
+    }
+
+    private TreeNode copy(TreeNode root) {
+        if (root == null){
+            return null;
+        }
+
+        TreeNode newNode = new TreeNode(root.key, root.value);
+        newNode.left = copy(root.left);
+        newNode.right = copy(root.right);
+        return newNode;
     }
 
     /**
@@ -47,7 +61,12 @@ public class ConstConstTreeMap {
      * @return the old value if the key already existed in this map, or 'null' otherwise.
      */
     public IntConst put(IntConst key, IntConst value) {
-        return null;
+        if (this.root == null){
+            this.root = new TreeNode(key,value);
+            return null;
+        }else{
+            return this.root.put(key,value);
+        }
     }
 
     /**
@@ -58,7 +77,11 @@ public class ConstConstTreeMap {
      * this map).
      */
     public IntConst get(IntConst key) {
-        return null;
+        if (this.root == null){
+            return null;
+        }else{
+            return this.root.get(key);
+        }
     }
 
     /**
@@ -71,7 +94,24 @@ public class ConstConstTreeMap {
      * @return The number of common keys between the two maps.
      */
     public int countCommonKeys(ConstConstTreeMap other) {
+        if (other.root != null) {
+            return count(other.root);
+        }
         return -1;
+    }
+
+    private int count(TreeNode node){
+        int count = 0;
+        if (node == null){
+            return 0;
+        }
+        if (this.root.get(node.key) != null){
+            count+= 1;
+        }
+
+        count = count + count(node.left);
+        count = count + count(node.left);
+        return count;
     }
 
     /**
@@ -84,7 +124,11 @@ public class ConstConstTreeMap {
      * @return the string representation of this map.
      */
     public String toString() {
-        return null;
+        if (this.root == null){
+            return "[]";
+        }else{
+            return "[" + this.root + "]";
+        }
     }
 
     /**
@@ -103,8 +147,116 @@ public class ConstConstTreeMap {
      * @return the string representation of a range of mappings of this map.
      */
     public String toString(IntConst lower, IntConst upper) {
-        return null;
+        if (this.root == null){
+            return "[]";
+        }else{
+            return "[" + this.root.toString(lower, upper) + "]";
+        }
     }
 }
 
 // TODO: define further classes, if needed (either here or in a separate file).
+class TreeNode{
+    TreeNode left,right;
+    final IntConst key;
+    IntConst value;
+
+    public TreeNode(IntConst k, IntConst v){
+        this.key = k;
+        this.value = v;
+        this.left = null;
+        this.right = null;
+    }
+
+    public IntConst put(IntConst k, IntConst v) {
+        if (this.key.isEqual(k)){
+            IntConst oldV = this.value;
+            this.value = v;
+            return oldV;
+        } else if (k.lessThan(this.key)){
+            if (this.left == null){
+                this.left = new TreeNode(k, v);
+                return null;
+            } else {
+                return this.left.put(k, v);
+            }
+        } else {
+            if (this.right == null){
+                this.right = new TreeNode(k, v);
+                return null;
+            } else {
+                return this.right.put(k, v);
+            }
+        }
+    }
+
+    public IntConst get(IntConst k) {
+        if (k.isEqual(this.key)){
+            return this.value;
+        }else{
+            if (k.lessThan(this.key)){
+                if (this.left == null){
+                    return null;
+                }else{
+                    return this.left.get(k);
+                }
+            }else {
+                if (this.right == null){
+                    return null;
+                }else{
+                    return this.right.get(k);
+                }
+            }
+        }
+    }
+
+    public String toString() {
+        String result = "";
+
+        if (this.left != null) {
+            result += this.left + ",";
+        }
+
+        result += this.key + "=" + this.value;
+
+        if (this.right != null) {
+            result += "," + this.right;
+        }
+
+        return result;
+    }
+
+    public String toString(IntConst lower, IntConst upper) {
+        String result = "";
+
+        // Linken Teilbaum verarbeiten und nur hinzufügen, wenn nicht leer
+        if (this.left != null) {
+            String leftResult = this.left.toString(lower, upper);
+            if (!leftResult.isEmpty()) {
+                result += leftResult;
+            }
+        }
+
+        // Aktuellen Knoten hinzufügen, wenn er im Bereich liegt
+        if ((lower.lessThan(this.key) || lower.isEqual(this.key)) && (this.key.lessThan(upper) || this.key.isEqual(upper))) {
+            if (!result.isEmpty()) {
+                result += ",";
+            }
+            result += this.key + "=" + this.value;
+        }
+
+        // Rechten Teilbaum verarbeiten und nur hinzufügen, wenn nicht leer
+        if (this.right != null) {
+            String rightResult = this.right.toString(lower, upper);
+            if (!rightResult.isEmpty()) {
+                if (!result.isEmpty()) {
+                    result += ",";
+                }
+                result += rightResult;
+            }
+        }
+
+        return result;
+    }
+
+}
