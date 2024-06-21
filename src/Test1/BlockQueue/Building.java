@@ -43,8 +43,8 @@ public class Building {
      */
     public Building connectWith(Building building) {
         BlockQueue newQueue = new BlockQueue();
-        BlockQueue queue1 = this.getQueue();
-        BlockQueue queue2 = building.getQueue();
+        BlockQueue queue1 = new BlockQueue(this.getQueue());
+        BlockQueue queue2 = new BlockQueue(building.getQueue());
 
         while (!queue1.isEmpty() || !queue2.isEmpty()) {
             Block block1 = queue1.poll();
