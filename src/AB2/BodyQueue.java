@@ -9,6 +9,9 @@ package AB2;
 public class BodyQueue {
 
     //TODO: declare variables.
+    private Body[] bodies;
+    private int size;
+    private int tail;
 
     /**
      * Initializes this queue with an initial capacity.
@@ -16,8 +19,10 @@ public class BodyQueue {
      *                        initialCapacity > 0.
      */
     public BodyQueue(int initialCapacity) {
-
         //TODO: define constructor.
+        this.bodies = new Body[initialCapacity];
+        this.size = 0;
+        this.tail = 0;
     }
 
     /**
@@ -27,8 +32,14 @@ public class BodyQueue {
      * @param q the queue from which elements are copied to the new queue, q != null.
      */
     public BodyQueue(BodyQueue q) {
-
         //TODO: define constructor.
+        this.bodies = new Body[q.size()];
+
+        for (int i = 0; i < bodies.length; i++) {
+            bodies[i] = q.bodies[i];
+        }
+        this.size= q.size;
+        this.tail = q.tail;
     }
 
     /**
@@ -36,8 +47,21 @@ public class BodyQueue {
      * @param b the element that is added to the queue.
      */
     public void add(Body b) {
-
         //TODO: implement method.
+        if (this.size == this.bodies.length){
+            doubleCapacity();
+        }
+        bodies[tail] = b;
+        tail++;
+        size++;
+    }
+
+    private void doubleCapacity() {
+        Body[] newBodies = new Body[bodies.length*2];
+        for (int i = 0; i < bodies.length; i++) {
+            newBodies[i] = bodies[i];
+        }
+        this.bodies = newBodies;
     }
 
     /**
@@ -46,9 +70,21 @@ public class BodyQueue {
      * @return the head of this queue (or 'null' if this queue is empty).
      */
     public Body poll() {
+        if (this.size < 1){
+            return null;
+        }
+        Body nB = this.bodies[0];
+        shiftArray();
+        tail--;
+        size--;
+        return nB;
+    }
 
-        //TODO: implement method.
-        return null;
+    private void shiftArray() {
+        for (int i = 0; i < tail - 1; i++) {
+            bodies[i] = bodies[i + 1];
+        }
+        bodies[tail - 1] = null;
     }
 
     /**
@@ -56,8 +92,6 @@ public class BodyQueue {
      * @return the number of bodies in this queue.
      */
     public int size() {
-
-        //TODO: implement method.
-        return -1;
+        return this.size;
     }
 }

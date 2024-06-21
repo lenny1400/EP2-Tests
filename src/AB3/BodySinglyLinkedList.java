@@ -13,13 +13,15 @@ import AB2.Body;
 public class BodySinglyLinkedList {
 
     //TODO: declare variables.
+    private ListNode head, tail;
+
 
     /**
      * Initializes 'this' as an empty list.
      */
     public BodySinglyLinkedList() {
-
         // TODO: implement constructor.
+        this.head = null;
     }
 
     /**
@@ -31,7 +33,6 @@ public class BodySinglyLinkedList {
      */
     public BodySinglyLinkedList(BodySinglyLinkedList list) {
 
-        // TODO: implement constructor.
     }
 
     /**
@@ -40,8 +41,16 @@ public class BodySinglyLinkedList {
      * @param b the body that is added (b can also be 'null').
      */
     public void addFirst(Body b) {
-
         // TODO: implement method.
+        if (head == null){
+            head = tail = new ListNode(b);
+        }else if (head.getNext() == null){
+            ListNode newNode = new ListNode(b, head);
+            tail = head;
+            head = newNode;
+        }else {
+            head = new ListNode(b,head);
+        }
     }
 
     /**
@@ -50,8 +59,17 @@ public class BodySinglyLinkedList {
      * @param b the body that is added (b can also be 'null').
      */
     public void addLast(Body b) {
-
         // TODO: implement method.
+        if (head == null){
+            head = tail = new ListNode(b);
+        }else if (head.getNext() == null){
+            tail = new ListNode(b);
+            head.setNext(tail);
+        }else {
+            ListNode newNode = new ListNode(b);
+            tail.setNext(newNode);
+            tail = newNode;
+        }
     }
 
     /**
@@ -59,9 +77,14 @@ public class BodySinglyLinkedList {
      * Returns 'null' if the list is empty.
      */
     public Body getLast() {
-
         // TODO: implement method.
-        return null;
+        if (head == null){
+            return null;
+        }else if (head.getNext() == null){
+            return head.getValue();
+        }else{
+            return tail.getValue();
+        }
     }
 
     /**
@@ -69,9 +92,12 @@ public class BodySinglyLinkedList {
      * Returns 'null' if the list is empty.
      */
     public Body getFirst() {
-
         // TODO: implement method.
-        return null;
+        if (head == null){
+            return null;
+        }else{
+            return head.getValue();
+        }
     }
 
     /**
@@ -82,9 +108,18 @@ public class BodySinglyLinkedList {
      * @return the first element in this list, or 'null' if the list is empty.
      */
     public Body pollFirst() {
-
         // TODO: implement method.
-        return null;
+        if (head == null){
+            return null;
+        }else if (head.getNext() == null){
+            Body returnB = head.getValue();
+            head = tail = null;
+            return returnB;
+        }else{
+            Body returnB = head.getValue();
+            head = head.getNext();
+            return returnB;
+        }
     }
 
     /**
@@ -94,9 +129,23 @@ public class BodySinglyLinkedList {
      * @return the last element in this list, or 'null' if the list is empty.
      */
     public Body pollLast() {
-
         // TODO: implement method.
-        return null;
+        if (head == null){
+            return null;
+        }else if (head.getNext() == null){
+            Body returnB = head.getValue();
+            head = tail = null;
+            return returnB;
+        }else{
+            ListNode node = head;
+            while (node.getNext() != tail){
+                node = node.getNext();
+            }
+            Body returnB = tail.getValue();
+            tail = node;
+            node.setNext(null);
+            return returnB;
+        }
     }
 
     /**
@@ -108,8 +157,25 @@ public class BodySinglyLinkedList {
      * @param b the body that is added (b can also be 'null').
      */
     public void add(int i, Body b) {
-
         // TODO: implement method.
+        if (i == 0){
+            if (head == null){
+                head = tail = new ListNode(b);
+            }else {
+                head = new ListNode(b, head);
+            }
+        }else{
+            ListNode node = head;
+            while (i>1){
+                i--;
+                node = node.getNext();
+            }
+            ListNode newNode = new ListNode(b, node.getNext());
+            node.setNext(newNode);
+            if (node == tail){
+                tail = newNode;
+            }
+        }
     }
 
     /**
@@ -120,9 +186,21 @@ public class BodySinglyLinkedList {
      * @return the retrieved element at the specified position.
      */
     public Body get(int i) {
-
         // TODO: implement method.
-        return null;
+        if (i == 0){
+            if (head == null){
+                return null;
+            }else {
+                return head.getValue();
+            }
+        }else{
+            ListNode node = head;
+            while (i > 0){
+                i--;
+                node = node.getNext();
+            }
+            return node.getValue();
+        }
     }
 
     /**
@@ -135,19 +213,78 @@ public class BodySinglyLinkedList {
      * or -1 if this list does not contain the element.
      */
     public int indexOf(Body b) {
-
         // TODO: implement method.
-        return -2;
+        if (head == null){
+            return -1;
+        }else{
+            ListNode node = head;
+            int index = 0;
+            while (node != null){
+                if (node.getValue() == b){
+                    return index;
+                }
+                index++;
+                node = node.getNext();
+            }
+        }
+        return -1;
     }
 
     /**
      * Returns the number of entries in this list (including 'null' entries).
      */
     public int size() {
-
         // TODO: implement method.
-        return -1;
+        if (head == null){
+            return 0;
+        } else if (head.getNext() == null) {
+            return 1;
+        }else{
+            int count = 1;
+            ListNode node = head;
+            while (node.getNext() != null){
+                count++;
+                node = node.getNext();
+            }
+            return count;
+        }
     }
 }
 
 // TODO: define further classes, if needed (either here or in a separate file).
+class ListNode{
+
+    private Body value;
+    private ListNode next;
+
+    public ListNode(){
+        value = null;
+        next = null;
+    }
+
+    public ListNode(Body b){
+        value = b;
+        next = null;
+    }
+
+    public ListNode(Body b, ListNode n){
+        value = b;
+        next = n;
+    }
+
+    public void setNext(ListNode next) {
+        this.next = next;
+    }
+
+    public ListNode getNext() {
+        return next;
+    }
+
+    public Body getValue() {
+        return value;
+    }
+
+    public void setValue(Body value) {
+        this.value = value;
+    }
+}

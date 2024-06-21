@@ -13,6 +13,17 @@ public class Body {
     public Vector3 currentMovement;
 
     //TODO: define constructor.
+    public Body(){
+        this.mass = 0;
+        this.massCenter = new Vector3();
+        this.currentMovement = new Vector3();
+    }
+
+    public Body(Double mass, Vector3 massCenter, Vector3 currentMovement){
+        this.mass = mass;
+        this.massCenter = massCenter;
+        this.currentMovement = currentMovement;
+    }
 
     /**
      * Returns the distance between the centers of mass of this body and the specified body 'b'.
@@ -20,7 +31,6 @@ public class Body {
      * @return the distance between the centers of mass of this body and the specified body 'b'.
      */
     public double distanceTo(Body b) {
-
         //TODO: implement method.
         return 0;
     }

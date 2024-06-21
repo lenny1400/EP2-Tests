@@ -15,8 +15,6 @@ public class Test {
 
         //test classes BodyQueue and BodyAccelerationMap
 
-        /* TODO: remove this line
-
         // create three bodies
         Body sun = new Body(1.989e30,new Vector3(0,0,0),new Vector3(0,0,0));
         Body earth = new Body(5.972e24,new Vector3(-1.394555e11,5.103346e10,0),
@@ -64,7 +62,30 @@ public class Test {
         testValue(bam.get(earth).distanceTo(new Vector3(0,0,0)), 0);
         testIdentity(bam.get(mercury),null);
 
-        // TODO: remove this line */
+        System.out.println("Test3:");
+
+        bam = new BodyAccelerationMap(2);
+        Vector3 acceleration1 = earth.acceleration(sun);
+        Vector3 acceleration2 = sun.acceleration(earth);
+
+        // Test 1: put method with a new key-value pair
+        Vector3 oldAcceleration = bam.put(earth, acceleration1);
+        testIdentity(oldAcceleration, null);
+        testValue(bam.get(earth).distanceTo(acceleration1), 0);
+
+        // Test 2: put method with an existing key and a new value
+        Vector3 newAcceleration = new Vector3(0, 0, 0);
+        oldAcceleration = bam.put(earth, newAcceleration);
+        testIdentity(oldAcceleration, acceleration1);
+        testValue(bam.get(earth).distanceTo(newAcceleration), 0);
+
+        // Test 3: get method with an existing key
+        Vector3 retrievedAcceleration = bam.get(earth);
+        testIdentity(retrievedAcceleration, newAcceleration);
+
+        // Test 4: get method with a non-existing key
+        retrievedAcceleration = bam.get(sun);
+        testIdentity(retrievedAcceleration, null);
 
     }
 

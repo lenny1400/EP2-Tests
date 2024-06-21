@@ -13,6 +13,17 @@ public class Vector3 {
     public double z;
 
     //TODO: define constructor.
+    public Vector3() {
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+    }
+
+    public Vector3(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
 
     /**
      * Returns the sum of this vector and vector 'v'.
@@ -20,9 +31,12 @@ public class Vector3 {
      * @return the sum of this vector and vector 'v'.
      */
     public Vector3 plus(Vector3 v) {
-
         //TODO: implement method.
-        return null;
+        Vector3 result = new Vector3(0,0,0);
+        result.x = this.x + v.x;
+        result.y = this.y + v.y;
+        result.z = this.z + v.z;
+        return result;
     }
 
     /**
@@ -31,9 +45,11 @@ public class Vector3 {
      * @return the product of this vector and 'd'.
      */
     public Vector3 times(double d) {
-
         //TODO: implement method.
-        return null;
+        this.x = this.x * d;
+        this.y = this.y * d;
+        this.z = this.z * d;
+        return new Vector3(this.x, this.y, this.z);
     }
 
     /**
@@ -42,9 +58,11 @@ public class Vector3 {
      * @return the sum of this vector and -1*v.
      */
     public Vector3 minus(Vector3 v) {
-
         //TODO: implement method.
-        return null;
+        this.x = this.x - v.x;
+        this.y = this.y - v.y;
+        this.z = this.z - v.z;
+        return new Vector3(this.x, this.y, this.z);
     }
 
     /**
@@ -53,9 +71,11 @@ public class Vector3 {
      * @return the Euclidean distance of this vector to the specified vector 'v'.
      */
     public double distanceTo(Vector3 v) {
-
         //TODO: implement method.
-        return -1d;
+        double x = this.x - v.x;
+        double y = this.y - v.y;
+        double z = this.z - v.z;
+        return Math.sqrt(x * x + y * y + z * z);
     }
 
     /**
@@ -63,9 +83,8 @@ public class Vector3 {
      * @return the length (norm) of this vector.
      */
     public double length() {
-
         //TODO: implement method.
-        return 0;
+        return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
     /**
@@ -73,8 +92,11 @@ public class Vector3 {
      * The direction of the vector is not affected.
      */
     public void normalize() {
-
         //TODO: implement method.
+        double length = length();
+        this.x /= length;
+        this.y /= length;
+        this.z /= length;
     }
 
     /**
@@ -84,8 +106,11 @@ public class Vector3 {
      * @param radius the radius > 0.
      */
     public void drawAsFilledCircle(CodeDraw cd, double radius) {
-
         //TODO: implement method.
+        double x = cd.getWidth() * (this.x + Simulation.SECTION_SIZE / 2) / Simulation.SECTION_SIZE;
+        double y = cd.getWidth() * (this.y + Simulation.SECTION_SIZE / 2) / Simulation.SECTION_SIZE;
+        radius = cd.getWidth() * radius / Simulation.SECTION_SIZE;
+        cd.fillCircle(x, y, Math.max(radius, 1.5));
     }
 
     /**
@@ -94,9 +119,8 @@ public class Vector3 {
      * @return 'this' represented as a string.
      */
     public String toString() {
-
         //TODO: implement method.
-        return "";
+        return "[" + x + ", " + y + ", " + z + "]";
     }
 }
 
